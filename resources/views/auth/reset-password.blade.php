@@ -1,39 +1,102 @@
-<x-guest-layout>
-    <form method="POST" action="{{ route('password.store') }}">
-        @csrf
+@component('layouts.admin-guest', ['title' => 'Reset Password'])
+    <div class="login-box">
+        <div class="card card-outline card-primary">
+            <div class="card-header text-center">
+                <a href="{{ route('login') }}" class="link-dark text-center link-offset-2 link-opacity-100 link-opacity-50-hover">
+                    <h1 class="mb-0">{{ config('app.name', 'Laravel') }}</h1>
+                </a>
+            </div>
+            <div class="card-body login-card-body">
+                <p class="login-box-msg">Reset your password</p>
 
-        <!-- Password Reset Token -->
-        <input type="hidden" name="token" value="{{ $request->route('token') }}">
+                @if ($errors->any())
+                    <div class="alert alert-danger" role="alert">
+                        <div class="fw-semibold mb-1">Please fix the errors below.</div>
+                        <ul class="mb-0 ps-3">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
 
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email', $request->email)" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
+                <form method="POST" action="{{ route('password.store') }}">
+                    @csrf
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-            <x-text-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="new-password" />
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
+                    <input type="hidden" name="token" value="{{ $request->route('token') }}">
 
-        <!-- Confirm Password -->
-        <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
+                    <div class="input-group mb-2">
+                        <div class="form-floating">
+                            <input
+                                id="resetEmail"
+                                type="email"
+                                class="form-control @error('email') is-invalid @enderror"
+                                name="email"
+                                value="{{ old('email', $request->email) }}"
+                                placeholder="Email"
+                                autocomplete="username"
+                                required
+                                autofocus
+                            />
+                            <label for="resetEmail">{{ __('Email') }}</label>
+                        </div>
+                        <div class="input-group-text">
+                            <span class="bi bi-envelope"></span>
+                        </div>
+                        @error('email')
+                            <div class="invalid-feedback d-block">{{ $message }}</div>
+                        @enderror
+                    </div>
 
-            <x-text-input id="password_confirmation" class="block mt-1 w-full"
+                    <div class="input-group mb-2">
+                        <div class="form-floating">
+                            <input
+                                id="resetPassword"
                                 type="password"
-                                name="password_confirmation" required autocomplete="new-password" />
+                                class="form-control @error('password') is-invalid @enderror"
+                                name="password"
+                                placeholder="Password"
+                                autocomplete="new-password"
+                                required
+                            />
+                            <label for="resetPassword">{{ __('Password') }}</label>
+                        </div>
+                        <div class="input-group-text">
+                            <span class="bi bi-lock-fill"></span>
+                        </div>
+                        @error('password')
+                            <div class="invalid-feedback d-block">{{ $message }}</div>
+                        @enderror
+                    </div>
 
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
-        </div>
+                    <div class="input-group mb-3">
+                        <div class="form-floating">
+                            <input
+                                id="resetPasswordConfirmation"
+                                type="password"
+                                class="form-control @error('password_confirmation') is-invalid @enderror"
+                                name="password_confirmation"
+                                placeholder="Confirm Password"
+                                autocomplete="new-password"
+                                required
+                            />
+                            <label for="resetPasswordConfirmation">{{ __('Confirm Password') }}</label>
+                        </div>
+                        <div class="input-group-text">
+                            <span class="bi bi-lock"></span>
+                        </div>
+                        @error('password_confirmation')
+                            <div class="invalid-feedback d-block">{{ $message }}</div>
+                        @enderror
+                    </div>
 
-        <div class="flex items-center justify-end mt-4">
-            <x-primary-button>
-                {{ __('Reset Password') }}
-            </x-primary-button>
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-arrow-repeat me-1"></i> {{ __('Reset Password') }}
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
-    </form>
-</x-guest-layout>
+    </div>
+@endcomponent
