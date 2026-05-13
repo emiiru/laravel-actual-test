@@ -1,15 +1,8 @@
 <section>
-    <div class="d-flex align-items-start justify-content-between mb-3">
-        <div>
-            <h5 class="mb-1">{{ __('Profile Information') }}</h5>
-            <p class="text-body-secondary mb-0">
-                {{ __("Update your account's profile information and email address.") }}
-            </p>
-        </div>
-    </div>
-
     @if (session('status') === 'profile-updated')
-        <div class="alert alert-success" role="alert">{{ __('Saved.') }}</div>
+        <div class="alert alert-success" role="alert">
+            <i class="bi bi-check-circle me-1"></i> {{ __('Profile updated.') }}
+        </div>
     @endif
 
     <form id="send-verification" method="post" action="{{ route('verification.send') }}">
@@ -35,6 +28,7 @@
             @error('name')
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror
+            <div class="form-text">This name will be visible across your account.</div>
         </div>
 
         <div class="mb-3">
@@ -51,18 +45,25 @@
             @error('email')
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror
+            <div class="form-text">We’ll use this email for account-related notifications.</div>
 
             @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! $user->hasVerifiedEmail())
                 <div class="mt-2">
                     <div class="alert alert-warning py-2 mb-2" role="alert">
-                        {{ __('Your email address is unverified.') }}
-                        <button type="submit" form="send-verification" class="btn btn-link p-0 align-baseline">
-                            {{ __('Click here to re-send the verification email.') }}
-                        </button>
+                        <div class="d-flex align-items-center justify-content-between gap-2 flex-wrap">
+                            <div>
+                                <i class="bi bi-exclamation-triangle me-1"></i>
+                                {{ __('Your email address is unverified.') }}
+                            </div>
+                            <button type="submit" form="send-verification" class="btn btn-sm btn-outline-dark">
+                                <i class="bi bi-send me-1"></i> {{ __('Resend') }}
+                            </button>
+                        </div>
                     </div>
 
                     @if (session('status') === 'verification-link-sent')
                         <div class="alert alert-info py-2 mb-0" role="alert">
+                            <i class="bi bi-info-circle me-1"></i>
                             {{ __('A new verification link has been sent to your email address.') }}
                         </div>
                     @endif

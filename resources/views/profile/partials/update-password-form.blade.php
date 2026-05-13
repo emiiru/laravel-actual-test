@@ -1,16 +1,17 @@
 <section>
-    <div class="d-flex align-items-start justify-content-between mb-3">
+    @if (session('status') === 'password-updated')
+        <div class="alert alert-success" role="alert">
+            <i class="bi bi-check-circle me-1"></i> {{ __('Password updated.') }}
+        </div>
+    @endif
+
+    <div class="alert alert-light border d-flex align-items-start gap-2" role="note">
+        <i class="bi bi-info-circle mt-1"></i>
         <div>
-            <h5 class="mb-1">{{ __('Update Password') }}</h5>
-            <p class="text-body-secondary mb-0">
-                {{ __('Ensure your account is using a long, random password to stay secure.') }}
-            </p>
+            <div class="fw-semibold">Tip</div>
+            <div class="small text-body-secondary">Use a long password (12+ characters) and avoid reusing it elsewhere.</div>
         </div>
     </div>
-
-    @if (session('status') === 'password-updated')
-        <div class="alert alert-success" role="alert">{{ __('Saved.') }}</div>
-    @endif
 
     <form method="post" action="{{ route('password.update') }}">
         @csrf
